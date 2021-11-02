@@ -3,12 +3,12 @@ import './style.css'
 import * as THREE from 'three'
 //import { OrbitControls } from 'three/examples/jsm/controls/RealmControls.js'
 import { RealmControls } from './libs/RealmControls'
-import * as dat from 'dat.gui'
+import GUI from 'lil-gui'
 
 import {Ground} from './ground'
 import { Sculpture } from './sculpture'
 
-const gui = new dat.GUI();
+const gui = new GUI();
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -28,18 +28,34 @@ let debugMode = false;
 let ground, sculpture;
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 10000)
-camera.position.set(4.5, 10, 4.5);
+camera.position.set(4.5, 5, 4.5);
  camera.rotation.x = -Math.PI/2;
 scene.add(camera)
 
-// Controls
+
+const myObj = {
+  teleport: ()=>{
+    console.log("shnur");
+    camera.position.y ++;
+  }
+}
+
+gui.add(myObj, "teleport");
+
+
+console.log(camera.rotation.y);
+
+// // Controls
 let controls;
 controls = new RealmControls(camera, canvas)
 controls.listenToKeyEvents(window);
-//  controls.enabled = false;
+//controls.enabled = false;
 controls.enableDamping = true
 controls.zoomSpeed = 0.5;
 controls.target = new THREE.Vector3(5, 0, 5);
+controls.dampingFactor = 0.1;
+
+console.log(camera.rotation.y)
 
 
 /**

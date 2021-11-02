@@ -65,7 +65,7 @@ var RealmControls = function ( object, domElement ) {
 	this.enablePan = true;
 	this.panSpeed = 1.0;
 	this.screenSpacePanning = true; // if false, pan orthogonal to world-space direction camera.up
-	this.keyPanSpeed = 1111.0;	// pixels moved per arrow key push
+	this.keyPanSpeed = 555.0;	// pixels moved per arrow key push
 
 	// Set to true to automatically rotate around the target
 	// If auto-rotate is enabled, you must call controls.update() in your animation loop
@@ -161,7 +161,7 @@ var RealmControls = function ( object, domElement ) {
 			offset.applyQuaternion( quat );
 
 			// angle from z-axis around y-axis
-			spherical.setFromVector3( offset );
+			//spherical.setFromVector3( offset );
 
 			if ( scope.autoRotate && state === STATE.NONE ) {
 
@@ -1119,7 +1119,6 @@ var RealmControls = function ( object, domElement ) {
 				if ( scope.enableRotate === false ) return;
 
 				handleTouchMoveRotate( event );
-
 				scope.update();
 
 				break;
