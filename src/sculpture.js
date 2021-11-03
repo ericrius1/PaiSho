@@ -13,19 +13,18 @@ class Sculpture extends THREE.Object3D{
     init(){
       this.palette = colors.getRandom(5);
 
-      const geometry = new THREE.IcosahedronBufferGeometry(2, 0);
+      const geometry = new THREE.IcosahedronBufferGeometry(0.25, 0);
       const material = new THREE.MeshPhysicalMaterial({
-        color: 0xffff00,
-        roughness: 0.75,
-        transmission: 1,
-        thickness: 0.5,
+        roughness: 0,
+        transmission: 1
       });
 
       this.mesh = new THREE.Mesh(geometry, material);
+      this.mesh.position.set(5, 0.3, 5);
       this.add(this.mesh);
 
-      let light = new THREE.DirectionalLight(0xffffff)
-      light.intensity = 100
+      let light = new THREE.DirectionalLight(0xfff0dd, 1)
+      light.position.set(0, 10, 5);
       this.add(light)
     }
 
