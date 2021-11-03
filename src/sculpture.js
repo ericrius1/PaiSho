@@ -8,28 +8,49 @@ class Sculpture extends THREE.Object3D{
 
     constructor(){
       super()
+
+      this.options = {
+        transmission: 1,
+        thickness: 0.5,
+        roughness: 0.07,
+        envMapIntensity: 1.5
+      }
+
+    
+
       this.init();
     }
 
     init(){
-      this.palette = colors.getRandom(5);
       const hdrEquirect = new RGBELoader().load(
-        "/moonless.hdr",
+        "warehouse.hdr",
         () => {
           hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
         }
       );
-
-      const geometry = new THREE.IcosahedronBufferGeometry(0.25, 15);
-      const material = new THREE.MeshPhysicalMaterial({
-        roughness: 0.7, //adds some "frosting", making light that passes through the material more diffuse
-        transmission: 1,
-        thickness: 0.5,
+      this.material = new THREE.MeshPhysicalMaterial({
+        roughness: this.options.roughness, //adds some "frosting", making light that passes through the material more diffuse
+        transmission: this.options.transmission,
+        thickness: this.options.thickness,
         envMap: hdrEquirect,
-        envMapIntensity: 20
+        envMapIntensity: this.options.envMapIntensity
       });
+      gui.add(this.options, 'transmission', 0, 1, 0.01).onChange((val)=>{
+        this.material.transmission = this.options.transmission
+      })
+      gui.add(this.options, 'thickness', 0, 1, 0.01).onChange((val)=>{
+        this.material.thickness = this.options.thickness;
+      })
+      gui.add(this.options, 'roughness', 0, 1, 0.01).onChange((val)=>{
+        this.material.roughness = this.options.roughness;
+      })
+      this.palette = colors.getRandom(5);
+     
 
-      this.mesh = new THREE.Mesh(geometry, material);
+      const geometry = new THREE.IcosahedronBufferGeometry(0.25, 0);
+
+
+      this.mesh = new THREE.Mesh(geometry, this.material);
       this.mesh.position.set(5, 0.3, 5);
       this.add(this.mesh);
 

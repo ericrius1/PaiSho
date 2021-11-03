@@ -14,7 +14,7 @@ class Ground extends THREE.Object3D{
 
     init(){
       this.palette = colors.getRandom(7);
-      const bgTexture = new THREE.TextureLoader().load('/shnurTexture.jpg');
+      const bgTexture = new THREE.TextureLoader().load('shnurTexture.jpg');
       // create ground patches
       let geo = new THREE.BoxBufferGeometry(1, .1, 1);
       let mat;
