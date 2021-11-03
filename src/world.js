@@ -35,7 +35,7 @@ scene.add(camera)
 
 const myObj = {
   teleport: ()=>{
-    camera.position.y ++;
+      camera.position.y ++;
   }
 }
 
