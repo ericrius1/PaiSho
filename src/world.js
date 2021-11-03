@@ -145,3 +145,7 @@ export {clock, gui, textureLoader, renderer, camera}
 // Prioritize control feel, visual feel and create from there. SO every time you enter world to test, it feels more and more beautiful
 
  // Make the ojects easy to create position wise / rotation wise / not as concerned as camera positoin, and make flexibile around that 
+
+
+ // https://gist.github.com/cobyism/4730490
+ // for dist subtree
