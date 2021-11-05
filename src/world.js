@@ -8,6 +8,10 @@ import GUI from 'lil-gui'
 import {Ground} from './ground'
 import { Sculpture } from './sculpture'
 
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer'
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass'
+import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+
 const gui = new GUI();
 
 // Canvas
@@ -29,7 +33,7 @@ let ground, sculpture;
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 10000)
 camera.position.set(4.5, 5, 4.5);
- camera.rotation.x = -Math.PI/2;
+camera.rotation.x = -Math.PI/2;
 scene.add(camera)
 
 
@@ -61,11 +65,38 @@ console.log(camera.rotation.y)
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas: canvas,
+    antialias: true
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setClearColor(new THREE.Color(.01, .01, .11))
+
+
+const options = {
+  bloomThreshold: 0.85,
+  bloomStrength: 0.2,
+  bloomRadius: 0.33
+}
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(sizes.width, sizes.height), options.bloomStrength, options.bloomThreshold, options.bloomRadius);
+composer.addPass(renderPass);
+composer.addPass(bloomPass);
+
+
+const postprocessingFolder = gui.addFolder("Post Processing");
+postprocessingFolder.add(options, "bloomThreshold", 0, 1, 0.01).onChange((val) => {
+  bloomPass.threshold = val;
+});
+
+postprocessingFolder.add(options, "bloomStrength", 0, 1, 0.01).onChange((val) => {
+  bloomPass.strength = val;
+});
+
+postprocessingFolder.add(options, "bloomRadius", 0, 1, 0.01).onChange((val) => {
+  bloomPass.radius = val;
+});
 
 /**
  * Animate
@@ -108,7 +139,8 @@ const tick = () =>
 
     }
 
-    renderer.render(scene, camera)
+    //renderer.render(scene, camera)
+    composer.render();
 
     window.requestAnimationFrame(tick)
 
@@ -124,13 +156,19 @@ window.addEventListener('resize', () =>
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
 
+    const dpr = Math.min(pixelRatio, 2); // Cap DPR scaling to 2x
+
     // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
     // Update renderer
+    renderer.setPixelRatio(dpr);
     renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    composer.setPixelRatio(dpr);
+    composer.setSize(sizes.width, sizes.height);
+
 })
 
 
