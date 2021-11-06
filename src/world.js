@@ -4,7 +4,7 @@ import * as THREE from 'three'
 //import { OrbitControls } from 'three/examples/jsm/controls/RealmControls.js'
 import { RealmControls } from './libs/RealmControls'
 import GUI from 'lil-gui'
-
+import Stats from 'three/examples/jsm/libs/stats.module'
 import {Ground} from './ground'
 import { Sculpture } from './sculpture'
 
@@ -17,6 +17,9 @@ const gui = new GUI();
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 let textureLoader = new THREE.TextureLoader();
+
+const stats = Stats()
+document.body.appendChild(stats.dom)
 
 // Scene
 const scene = new THREE.Scene()
@@ -138,6 +141,7 @@ const tick = () =>
       controls.update()
 
     }
+    stats.update()
 
     //renderer.render(scene, camera)
     composer.render();
@@ -189,3 +193,15 @@ export {clock, gui, textureLoader, renderer, camera}
 
  // git add dist && git commit -m "Initial dist subtree commit"
  // git subtree push --prefix dist origin gh-pages
+
+ // get objects rotating in lots of ways then attach the camera to that
+
+ // make blog post, add on top of the transmission one and reference it, and just have cool shit happening, 
+ // like light rays shining through the objects but stylized, and twisting like paint brushes
+
+// ad basic control to move between realms at higher level abstraction,
+// then zoom into them so its a realm into itself
+// 
+// start simple, spiral around, and go deeer
+
+//tweening all kinds of params between worlds p5.BandPass
