@@ -10,7 +10,7 @@ body
     padding: 0;
 }
 
-.canvas_container{
+.container{
   width: 100%;
   height: 100%;
   display: flex;
@@ -19,7 +19,7 @@ body
 
 }
 
-.webgl_canvas
+.canvas_container
 {
     /* position: fixed; */
     /* top: 0;
@@ -27,15 +27,21 @@ body
     outline: none; */
 
     position: relative;
-    width: 50%;
+    width: 60%;
     border: solid red 5px;
     box-sizing: border-box;
 }
 
-.webgl_canvas:after {
+.canvas_container:after {
   content: "";
   display: block;
   padding-bottom: 100%;
+}
+
+.webgl_canvas{
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 #drawing-canvas {

@@ -15,6 +15,8 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 const gui = new GUI();
 
 // Canvas
+const viewport = document.querySelector('div.canvas_container');
+
 const canvas = document.querySelector('canvas.webgl_canvas')
 let textureLoader = new THREE.TextureLoader();
 
@@ -27,10 +29,9 @@ const scene = new THREE.Scene()
 const clock = new THREE.Clock();
 
 const sizes = {
-    width: canvas.width,
-    height: canvas.height
+    width: viewport.clientWidth,
+    height: viewport.clientHeight
 }
-
 let debugMode = false;
 let ground, sculpture;
 
@@ -48,9 +49,6 @@ const myObj = {
 
 gui.add(myObj, "teleport");
 
-
-console.log(camera.rotation.y);
-
 // // Controls
 let controls;
 controls = new RealmControls(camera, canvas)
@@ -61,19 +59,17 @@ controls.zoomSpeed = 0.5;
 controls.target = new THREE.Vector3(5, 0, 5);
 controls.dampingFactor = 0.1;
 
-console.log(camera.rotation.y)
-
-
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    //canvas: canvas,
+    canvas: canvas,
     antialias: true
 })
 renderer.setSize(sizes.width, sizes.height)
 const pixelRatio = window.devicePixelRatio;
-renderer.setPixelRatio(Math.min(pixelRatio, 2))
+const dpr = Math.min(pixelRatio, 2);
+renderer.setPixelRatio(dpr)
 renderer.setClearColor(new THREE.Color(.01, .01, .11))
 
 
@@ -144,8 +140,8 @@ const tick = () =>
     }
     stats.update()
 
-    //renderer.render(scene, camera)
-    composer.render();
+    renderer.render(scene, camera)
+    //composer.render();
 
     window.requestAnimationFrame(tick)
 
@@ -158,23 +154,20 @@ window.addEventListener("keydown", onKeyDown)
 window.addEventListener('resize', () =>
 {
     // Update sizes
-    // sizes.width = canvas.width
-    // sizes.height = canvas.height
-
-    const dpr = Math.min(pixelRatio, 2); // Cap DPR scaling to 2x
+    sizes.width = viewport.clientWidth
+    sizes.height = viewport.clientHeight;
+   
 
     // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
     
-   //canvas.width = canvas.width  *  dpr;
-    //canvas.height = canvas.height * dpr;
-   // canvas.style.width = canvas.width + "px";
-    //canvas.style.width = canvas.height + "px";
+    // canvas.width = sizes.width  *  dpr;
+    // canvas.height = sizes.height * dpr;
+
 
     // Update renderer
-    // renderer.setPixelRatio(dpr);
-    // renderer.setSize(sizes.width, sizes.height)
+    renderer.setSize(sizes.width, sizes.height)
 
     // composer.setPixelRatio(dpr);
     // composer.setSize(sizes.width, sizes.height);
