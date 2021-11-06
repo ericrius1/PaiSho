@@ -15,7 +15,7 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 const gui = new GUI();
 
 // Canvas
-const canvas = document.querySelector('canvas.webgl')
+const canvas = document.querySelector('canvas.webgl_canvas')
 let textureLoader = new THREE.TextureLoader();
 
 const stats = Stats()
@@ -27,8 +27,8 @@ const scene = new THREE.Scene()
 const clock = new THREE.Clock();
 
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: canvas.width,
+    height: canvas.height
 }
 
 let debugMode = false;
@@ -68,11 +68,12 @@ console.log(camera.rotation.y)
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
+    //canvas: canvas,
     antialias: true
 })
 renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+const pixelRatio = window.devicePixelRatio;
+renderer.setPixelRatio(Math.min(pixelRatio, 2))
 renderer.setClearColor(new THREE.Color(.01, .01, .11))
 
 
@@ -157,21 +158,26 @@ window.addEventListener("keydown", onKeyDown)
 window.addEventListener('resize', () =>
 {
     // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+    // sizes.width = canvas.width
+    // sizes.height = canvas.height
 
     const dpr = Math.min(pixelRatio, 2); // Cap DPR scaling to 2x
 
     // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
+    
+   //canvas.width = canvas.width  *  dpr;
+    //canvas.height = canvas.height * dpr;
+   // canvas.style.width = canvas.width + "px";
+    //canvas.style.width = canvas.height + "px";
 
     // Update renderer
-    renderer.setPixelRatio(dpr);
-    renderer.setSize(sizes.width, sizes.height)
+    // renderer.setPixelRatio(dpr);
+    // renderer.setSize(sizes.width, sizes.height)
 
-    composer.setPixelRatio(dpr);
-    composer.setSize(sizes.width, sizes.height);
+    // composer.setPixelRatio(dpr);
+    // composer.setSize(sizes.width, sizes.height);
 
 })
 
