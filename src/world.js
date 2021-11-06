@@ -28,14 +28,10 @@ const scene = new THREE.Scene()
 
 const clock = new THREE.Clock();
 
-const sizes = {
-    width: viewport.clientWidth,
-    height: viewport.clientHeight
-}
 let debugMode = false;
 let ground, sculpture;
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.01, 10000)
+const camera = new THREE.PerspectiveCamera(75, viewport.clientWidth/ viewport.clientHeight, 0.01, 10000)
 camera.position.set(4.5, 5, 4.5);
 camera.rotation.x = -Math.PI/2;
 scene.add(camera)
@@ -48,6 +44,7 @@ const myObj = {
 }
 
 gui.add(myObj, "teleport");
+gui.close();
 
 // // Controls
 let controls;
@@ -66,10 +63,12 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true
 })
-renderer.setSize(sizes.width, sizes.height)
 const pixelRatio = window.devicePixelRatio;
 const dpr = Math.min(pixelRatio, 2);
+
 renderer.setPixelRatio(dpr)
+renderer.setSize(viewport.clientWidth, viewport.clientHeight)
+
 renderer.setClearColor(new THREE.Color(.01, .01, .11))
 
 
@@ -80,7 +79,7 @@ const options = {
 }
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(sizes.width, sizes.height), options.bloomStrength, options.bloomThreshold, options.bloomRadius);
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(viewport.clientWidth, viewport.clientHeight), options.bloomStrength, options.bloomThreshold, options.bloomRadius);
 composer.addPass(renderPass);
 composer.addPass(bloomPass);
 
@@ -153,21 +152,23 @@ tick()
 window.addEventListener("keydown", onKeyDown)
 window.addEventListener('resize', () =>
 {
-    // Update sizes
-    sizes.width = viewport.clientWidth
-    sizes.height = viewport.clientHeight;
+
    
 
     // Update camera
-    camera.aspect = sizes.width / sizes.height
+    camera.aspect = viewport.clientWidth/ viewport.clientHeight
     camera.updateProjectionMatrix()
+
+    console.log("SHNUUR")
     
     // canvas.width = sizes.width  *  dpr;
     // canvas.height = sizes.height * dpr;
 
 
     // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(dpr)
+
+    renderer.setSize(viewport.clientWidth, viewport.clientHeight)
 
     // composer.setPixelRatio(dpr);
     // composer.setSize(sizes.width, sizes.height);
