@@ -12,7 +12,10 @@ import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass'
 import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
+let x = 1;
+
 const gui = new GUI();
+
 
 // Canvas
 const viewport = document.querySelector('div.canvas_container');
@@ -22,6 +25,8 @@ let textureLoader = new THREE.TextureLoader();
 
 const stats = Stats()
 document.body.appendChild(stats.dom)
+
+
 
 // Scene
 const scene = new THREE.Scene()
@@ -46,6 +51,7 @@ const myObj = {
 gui.add(myObj, "teleport");
 gui.close();
 
+
 // // Controls
 let controls;
 controls = new RealmControls(camera, canvas)
@@ -63,13 +69,16 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true
 })
+  // renderer.setPixelRatio(dpr)
 const pixelRatio = window.devicePixelRatio;
-const dpr = Math.min(pixelRatio, 2);
+let desiredWidth = viewport.clientWidth * pixelRatio;
+let desiredHeight = viewport.clientHeight * pixelRatio;
 
-renderer.setPixelRatio(dpr)
-renderer.setSize(viewport.clientWidth, viewport.clientHeight)
+renderer.setSize(desiredWidth, desiredHeight, false)
 
 renderer.setClearColor(new THREE.Color(.01, .01, .11))
+
+
 
 
 const options = {
@@ -108,8 +117,6 @@ const initObjects = ()=> {
   sculpture = new Sculpture();
   scene.add(sculpture);
 }
-initObjects();
-
 
 
 const onKeyDown = (evt) => {
@@ -139,6 +146,8 @@ const tick = () =>
     }
     stats.update()
 
+    sculpture.update();
+
     renderer.render(scene, camera)
     //composer.render();
 
@@ -147,33 +156,34 @@ const tick = () =>
 
 }
 
-tick()
+const onResize = () => {
+  x+=1;
+  console.log(x)
+  // Update camera
+  camera.aspect = viewport.clientWidth/viewport.clientHeight
+  camera.updateProjectionMatrix()
+
+  
+  // Update renderer
+  let desiredWidth = viewport.clientWidth * pixelRatio;
+  let desiredHeight = viewport.clientHeight * pixelRatio;
+  renderer.setSize(desiredWidth, desiredHeight, false);
+  
+  // composer.setPixelRatio(dpr);
+  // composer.setSize(sizes.width, sizes.height);
+}
 
 window.addEventListener("keydown", onKeyDown)
+
 window.addEventListener('resize', () =>
 {
-
-   
-
-    // Update camera
-    camera.aspect = viewport.clientWidth/ viewport.clientHeight
-    camera.updateProjectionMatrix()
-
-    console.log("SHNUUR")
-    
-    // canvas.width = sizes.width  *  dpr;
-    // canvas.height = sizes.height * dpr;
-
-
-    // Update renderer
-    renderer.setPixelRatio(dpr)
-
-    renderer.setSize(viewport.clientWidth, viewport.clientHeight)
-
-    // composer.setPixelRatio(dpr);
-    // composer.setSize(sizes.width, sizes.height);
-
+   onResize()
 })
+
+initObjects();
+onResize();
+tick()
+
 
 
 export {clock, gui, textureLoader, renderer, camera}
@@ -205,3 +215,5 @@ export {clock, gui, textureLoader, renderer, camera}
 // start simple, spiral around, and go deeer
 
 //tweening all kinds of params between worlds p5.BandPass
+
+//find out about stechy canvas 

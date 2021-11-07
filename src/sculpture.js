@@ -10,6 +10,7 @@ class Sculpture extends THREE.Object3D{
     constructor(){
       super()
 
+      this.myScale = 1;
       this.options = {
         transmission: 1,
         thickness: 1.5,
@@ -22,9 +23,6 @@ class Sculpture extends THREE.Object3D{
         normalRepeat: 1,
   
       }
-
-    
-
       this.init();
     }
 
@@ -87,6 +85,7 @@ class Sculpture extends THREE.Object3D{
       const geometry = new THREE.IcosahedronBufferGeometry(0.25, 25);
 
 
+      
       this.mesh = new THREE.Mesh(geometry, this.material);
       this.mesh.position.set(5, 0.3, 5);
       this.add(this.mesh);
@@ -98,6 +97,9 @@ class Sculpture extends THREE.Object3D{
     }
 
     update(){
+      this.mesh.scale.set(this.myScale, this.myScale, this.myScale)
+      this.myScale += 0.0001;
+     // this.grow()
 
     }
 
@@ -106,6 +108,13 @@ class Sculpture extends THREE.Object3D{
     }
 
     dissolve(){
+
+    }
+
+    shrink() {
+
+    }
+    grow(){
 
     }
 }
