@@ -1,8 +1,10 @@
+import {Realm} from '../realm'
+
 class CraneRealm extends Realm {
-  constructor(){
+  constructor(scene, gui){
     super();
-
-
+    this.scene = scene;
+    this.gui = gui;
   }
 
   load(){

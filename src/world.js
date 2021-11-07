@@ -12,7 +12,8 @@ import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass'
 import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
-let x = 1;
+import {CraneRealm} from './realms/craneRealm'
+
 
 const gui = new GUI();
 
@@ -27,7 +28,8 @@ const stats = Stats()
 document.body.appendChild(stats.dom)
 
 
-
+let realms = [];
+let craneRealm = new CraneRealm();
 // Scene
 const scene = new THREE.Scene()
 
@@ -44,7 +46,7 @@ scene.add(camera)
 
 const myObj = {
   teleport: ()=>{
-      camera.position.y ++;
+      camera.position.y++
   }
 }
 
@@ -148,8 +150,8 @@ const tick = () =>
 
     sculpture.update();
 
-    renderer.render(scene, camera)
-    //composer.render();
+    //renderer.render(scene, camera)
+    composer.render();
 
     window.requestAnimationFrame(tick)
 
@@ -157,8 +159,6 @@ const tick = () =>
 }
 
 const onResize = () => {
-  x+=1;
-  console.log(x)
   // Update camera
   camera.aspect = viewport.clientWidth/viewport.clientHeight
   camera.updateProjectionMatrix()
@@ -181,7 +181,10 @@ window.addEventListener('resize', () =>
 })
 
 initObjects();
-onResize();
+setTimeout(()=>{
+  onResize();
+}, 100)
+
 tick()
 
 
@@ -214,6 +217,4 @@ export {clock, gui, textureLoader, renderer, camera}
 // 
 // start simple, spiral around, and go deeer
 
-//tweening all kinds of params between worlds p5.BandPass
-
-//find out about stechy canvas 
+//tweening all kinds of params between worlds
